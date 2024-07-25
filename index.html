@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מחשבון משכנתא מתקדם</title>
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #f5a623;
+            --background-color: #f8f9fa;
+            --text-color: #333;
+            --border-color: #ddd;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1,
+        h2 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 18px;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #3a7abd;
+        }
+
+        #results {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #e9ecef;
+            border-radius: 8px;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        #results.show {
+            opacity: 1;
+        }
+
+        .mortgage-component {
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+        }
+
+        .mortgage-component h3 {
+            margin-top: 0;
+            color: var(--secondary-color);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>מחשבון משכנתא מתקדם</h1>
+        <div class="form-group">
+            <label for="propertyPrice">מחיר הנכס:</label>
+            <input type="text" id="propertyPrice" required>
+        </div>
+        <div class="form-group">
+            <label for="downPayment">הון עצמי:</label>
+            <input type="text" id="downPayment" required>
+        </div>
+        <div id="mortgageComponents">
+            <div class="mortgage-component fade-in">
+                <h3>רכיב משכנתא 1</h3>
+                <div class="form-group">
+                    <label for="amount1">סכום:</label>
+                    <input type="text" id="amount1" required>
+                </div>
+                <div class="form-group">
+                    <label for="interestType1">סוג ריבית:</label>
+                    <select id="interestType1">
+                        <option value="fixed">קבועה</option>
+                        <option value="variable">משתנה כל 5 שנים</option>
+                        <option value="prime">פריים</option>
+                        <option value="other">אחר</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="interestRate1">שיעור ריבית שנתי (%):</label>
+                    <input type="text" id="interestRate1" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="period1">תקופה:</label>
+                    <select id="period1">
+                        <option value="20">20 שנה</option>
+                        <option value="25">25 שנה</option>
+                        <option value="30">30 שנה</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <button onclick="addMortgageComponent()">הוסף רכיב משכנתא</button>
+
+        <h2>פרמטרים כלכליים</h2>
+        <div class="form-group">
+            <label for="propertyAppreciation">שיעור עליית ערך הנכס שנתי (%):</label>
+            <input type="text" id="propertyAppreciation" value="3.5">
+        </div>
+        <div class="form-group">
+            <label for="inflation">שיעור אינפלציה שנתי משוער (%):</label>
+            <input type="text" id="inflation" value="2">
+        </div>
+        <div class="form-group">
+            <label for="constructionIndex">שיעור עליית מדד תשומות הבנייה שנתי (%):</label>
+            <input type="text" id="constructionIndex" value="2.5">
+        </div>
+        <div class="form-group">
+            <label for="constructionYears">משך זמן הבנייה (שנים):</label>
+            <input type="text" id="constructionYears" value="4">
+        </div>
+        <div class="form-group">
+            <label for="purchaseTax">מס רכישה (%):</label>
+            <input type="text" id="purchaseTax" value="0">
+        </div>
+        <div class="form-group">
+            <label for="saleYear">שנת מכירה (אופציונלי):</label>
+            <input type="text" id="saleYear">
+        </div>
+        <div class="form-group">
+            <label for="capitalGainsTax">מס שבח (%):</label>
+            <input type="text" id="capitalGainsTax" value="0">
+        </div>
+        <button onclick="calculate()">חשב</button>
+        <div id="results"></div>
+    </div>
+
+    <script>
+        let componentCount = 1;
+
+        function formatNumber(num) {
+            return new Intl.NumberFormat('he-IL').format(num);
+        }
+
+        function parseFormattedNumber(str) {
+            return parseFloat(str.replace(/,/g, ''));
+        }
+
+        function addMortgageComponent() {
+            componentCount++;
+            const newComponent = document.createElement('div');
+            newComponent.className = 'mortgage-component fade-in';
+            newComponent.innerHTML = `
+                <h3>רכיב משכנתא ${componentCount}</h3>
+                <div class="form-group">
+                    <label for="amount${componentCount}">סכום:</label>
+                    <input type="text" id="amount${componentCount}" required>
+                </div>
+                <div class="form-group">
+                    <label for="interestType${componentCount}">סוג ריבית:</label>
+                    <select id="interestType${componentCount}">
+                        <option value="fixed">קבועה</option>
+                        <option value="variable">משתנה כל 5 שנים</option>
+                        <option value="prime">פריים</option>
+                        <option value="other">אחר</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="interestRate${componentCount}">שיעור ריבית שנתי (%):</label>
+                    <input type="text" id="interestRate${componentCount}" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="period${componentCount}">תקופה:</label>
+                    <select id="period${componentCount}">
+                        <option value="20">20 שנה</option>
+                        <option value="25">25 שנה</option>
+                        <option value="30">30 שנה</option>
+                    </select>
+                </div>
+            `;
+            document.getElementById('mortgageComponents').appendChild(newComponent);
+            setupFormattedInputs();
+        }
+
+        function setupFormattedInputs() {
+            const inputs = document.querySelectorAll('input[type="text"]');
+            inputs.forEach(input => {
+                input.addEventListener('input', function (e) {
+                    let value = e.target.value.replace(/,/g, '');
+                    if (!isNaN(value) && value.length > 0) {
+                        e.target.value = formatNumber(parseFloat(value));
+                    }
+                });
+            });
+        }
+
+        function calculate() {
+            const propertyPrice = parseFormattedNumber(document.getElementById('propertyPrice').value);
+            const downPayment = parseFormattedNumber(document.getElementById('downPayment').value);
+            const appreciation = parseFormattedNumber(document.getElementById('propertyAppreciation').value) / 100;
+            const inflation = parseFormattedNumber(document.getElementById('inflation').value) / 100;
+            const constructionIndex = parseFormattedNumber(document.getElementById('constructionIndex').value) / 100;
+            const constructionYears = parseFormattedNumber(document.getElementById('constructionYears').value);
+            const purchaseTax = parseFormattedNumber(document.getElementById('purchaseTax').value) / 100;
+            const saleYear = parseFormattedNumber(document.getElementById('saleYear').value);
+            const capitalGainsTax = parseFormattedNumber(document.getElementById('capitalGainsTax').value) / 100;
+
+            let totalLoan = 0;
+            let totalMonthlyPayment = 0;
+            let maxPeriod = 0;
+            let mortgageComponents = [];
+
+            for (let i = 1; i <= componentCount; i++) {
+                const amount = parseFormattedNumber(document.getElementById(`amount${i}`).value);
+                const interestRate = parseFormattedNumber(document.getElementById(`interestRate${i}`).value) / 100;
+                const period = parseInt(document.getElementById(`period${i}`).value);
+
+                totalLoan += amount;
+                const monthlyRate = interestRate / 12;
+                const months = period * 12;
+                const monthlyPayment = amount * (monthlyRate * Math.pow(1 + monthlyRate, months)) / (Math.pow(1 + monthlyRate, months) - 1);
+                totalMonthlyPayment += monthlyPayment;
+
+                if (period > maxPeriod) maxPeriod = period;
+
+                mortgageComponents.push({ amount, interestRate, period, monthlyPayment });
+            }
+
+            const mortgageAmount = propertyPrice - downPayment;
+            const constructionCostIncrease = (mortgageAmount * 0.5) * (Math.pow(1 + constructionIndex, constructionYears) - 1);
+            const purchaseTaxAmount = propertyPrice * purchaseTax;
+
+            let results = '';
+
+            if (saleYear && saleYear <= maxPeriod) {
+                // Early sale scenario
+                const monthsUntilSale = saleYear * 12;
+                let totalPaidUntilSale = 0;
+                let remainingDebt = 0;
+                let totalInterestPaid = 0;
+
+                mortgageComponents.forEach(component => {
+                    const monthlyRate = component.interestRate / 12;
+                    const totalMonths = Math.min(monthsUntilSale, component.period * 12);
+                    const paidUntilSale = component.monthlyPayment * totalMonths;
+                    totalPaidUntilSale += paidUntilSale;
+
+                    const remainingPrincipal = component.amount * Math.pow(1 + monthlyRate, totalMonths) -
+                        (component.monthlyPayment / monthlyRate) * (Math.pow(1 + monthlyRate, totalMonths) - 1);
+                    remainingDebt += Math.max(0, remainingPrincipal);
+
+                    totalInterestPaid += paidUntilSale - (component.amount - Math.max(0, remainingPrincipal));
+                });
+
+                const propertyValueAtSale = propertyPrice * Math.pow(1 + appreciation, saleYear);
+                const realPropertyValueAtSale = propertyValueAtSale / Math.pow(1 + inflation, saleYear);
+                const realTotalPaidUntilSale = totalPaidUntilSale / Math.pow(1 + inflation, saleYear);
+
+                const grossProfit = propertyValueAtSale - propertyPrice - totalPaidUntilSale + constructionCostIncrease;
+                const capitalGainsTaxAmount = Math.max(0, grossProfit * capitalGainsTax);
+                const netProfit = grossProfit - capitalGainsTaxAmount - remainingDebt - purchaseTaxAmount;
+                results = `
+                    <h2>תוצאות למכירה בשנה ${saleYear}:</h2>
+                    <p>סכום ששולם עד למכירה: ${formatNumber(totalPaidUntilSale.toFixed(2))} ₪</p>
+                    <p>יתרת חוב במשכנתא: ${formatNumber(remainingDebt.toFixed(2))} ₪</p>
+                    <p>סך הריבית ששולמה: ${formatNumber(totalInterestPaid.toFixed(2))} ₪</p>
+                    <p>ערך הדירה בזמן המכירה: ${formatNumber(propertyValueAtSale.toFixed(2))} ₪</p>
+                    <p>ערך ריאלי של הדירה בזמן המכירה: ${formatNumber(realPropertyValueAtSale.toFixed(2))} ₪</p>
+                    <p>סך תשלומים ריאליים עד למכירה: ${formatNumber(realTotalPaidUntilSale.toFixed(2))} ₪</p>
+                    <p>רווח גולמי: ${formatNumber(grossProfit.toFixed(2))} ₪</p>
+                    <p>מס שבח: ${formatNumber(capitalGainsTaxAmount.toFixed(2))} ₪</p>
+                    <p>רווח נטו אחרי מכירה: ${formatNumber(netProfit.toFixed(2))} ₪</p>
+                `;
+            } else {
+                // Full term scenario (existing calculations)
+                const futureValue = propertyPrice * Math.pow(1 + appreciation, maxPeriod);
+                const totalPayments = totalMonthlyPayment * maxPeriod * 12;
+                const totalInterest = totalPayments - totalLoan;
+
+                const realFutureValue = futureValue / Math.pow(1 + inflation, maxPeriod);
+                const realTotalPayments = totalPayments / Math.pow(1 + inflation, maxPeriod);
+
+                const grossProfit = realFutureValue - propertyPrice - realTotalPayments - purchaseTaxAmount + constructionCostIncrease;
+                const capitalGainsTaxAmount = Math.max(0, grossProfit * capitalGainsTax);
+                const netProfit = grossProfit - capitalGainsTaxAmount;
+
+                results = `
+                    <h2>תוצאות לתקופה מלאה:</h2>
+                    <p>סך הכל הלוואה: ${formatNumber(totalLoan.toFixed(2))} ₪</p>
+                    <p>תשלום חודשי: ${formatNumber(totalMonthlyPayment.toFixed(2))} ₪</p>
+                    <p>ערך עתידי משוער של הנכס: ${formatNumber(futureValue.toFixed(2))} ₪</p>
+                    <p>ערך עתידי ריאלי של הנכס (מתואם לאינפלציה): ${formatNumber(realFutureValue.toFixed(2))} ₪</p>
+                    <p>סך הכל תשלומים: ${formatNumber(totalPayments.toFixed(2))} ₪</p>
+                    <p>סך הכל תשלומים ריאליים (מתואמים לאינפלציה): ${formatNumber(realTotalPayments.toFixed(2))} ₪</p>
+                    <p>סך הכל ריבית: ${formatNumber(totalInterest.toFixed(2))} ₪</p>
+                    <p>עלייה בעלות הבנייה: ${formatNumber(constructionCostIncrease.toFixed(2))} ₪</p>
+                    <p>מס רכישה: ${formatNumber(purchaseTaxAmount.toFixed(2))} ₪</p>
+                    <p>רווח גולמי משוער: ${formatNumber(grossProfit.toFixed(2))} ₪</p>
+                    <p>מס שבח: ${formatNumber(capitalGainsTaxAmount.toFixed(2))} ₪</p>
+                    <p>רווח נטו משוער (אחרי מס שבח): ${formatNumber(netProfit.toFixed(2))} ₪</p>
+                `;
+            }
+
+            const resultsElement = document.getElementById('results');
+            resultsElement.innerHTML = results;
+            resultsElement.classList.add('show');
+        }
+
+        // Set up formatted inputs on page load
+        setupFormattedInputs();
+    </script>
+</body>
+
+</html>
