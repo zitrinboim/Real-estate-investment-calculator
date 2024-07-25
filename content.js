@@ -123,9 +123,9 @@ function calculate() {
         const realPropertyValueAtSale = propertyValueAtSale / Math.pow(1 + inflation, saleYear);
         const realTotalPaidUntilSale = totalPaidUntilSale / Math.pow(1 + inflation, saleYear);
 
-        const grossProfit = propertyValueAtSale - propertyPrice - totalPaidUntilSale + constructionCostIncrease;
+        const grossProfit = propertyValueAtSale - propertyPrice - totalInterestPaid + constructionCostIncrease;
         const capitalGainsTaxAmount = Math.max(0, grossProfit * capitalGainsTax);
-        const netProfit = grossProfit - capitalGainsTaxAmount - remainingDebt - purchaseTaxAmount;
+        const netProfit = grossProfit - capitalGainsTaxAmount - purchaseTaxAmount;
         results = `
             <h2>תוצאות למכירה בשנה ${saleYear}:</h2>
             <p>סכום ששולם עד למכירה: ${formatNumber(totalPaidUntilSale.toFixed(2))} ₪</p>
@@ -150,9 +150,9 @@ function calculate() {
         const realFutureValue = futureValue / Math.pow(1 + inflation, maxPeriod);
         const realTotalPayments = totalPayments / Math.pow(1 + inflation, maxPeriod);
 
-        const grossProfit = realFutureValue - propertyPrice - realTotalPayments - purchaseTaxAmount + constructionCostIncrease;
+        const grossProfit = propertyValueAtSale - propertyPrice - totalInterestPaid + constructionCostIncrease;
         const capitalGainsTaxAmount = Math.max(0, grossProfit * capitalGainsTax);
-        const netProfit = grossProfit - capitalGainsTaxAmount;
+        const netProfit = grossProfit - capitalGainsTaxAmount - purchaseTaxAmount;
 
         results = `
             <h2>תוצאות לתקופה מלאה:</h2>
