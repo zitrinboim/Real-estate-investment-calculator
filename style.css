@@ -76,6 +76,16 @@ button:hover {
     background-color: #3a7abd;
 }
 
+button#downloadPDF {
+    background-color: var(--primary-color);
+    margin-top: 10px;
+}
+
+button#downloadPDF:hover {
+    background-color: #2980b9;
+    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+}
+
 #results {
     margin-top: 30px;
     padding: 20px;
