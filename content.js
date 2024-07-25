@@ -176,6 +176,24 @@ function calculate() {
     resultsElement.classList.add('show');
 }
 
+function downloadPDF() {
+    const resultsElement = document.getElementById('results');
+    if (!resultsElement.innerHTML.trim()) {
+        alert('אנא בצע חישוב לפני הורדת ה-PDF');
+        return;
+    }
+
+    const element = document.createElement('div');
+    element.innerHTML = `
+        <h1>תוצאות חישוב המשכנתא</h1>
+        ${resultsElement.innerHTML}
+    `;
+
+    html2pdf().from(element).save('תוצאות_חישוב_משכנתא.pdf');
+}
+
+window.downloadPDF = downloadPDF;
+
 // חשוב לייצא את הפונקציות שנקראות מה-HTML
 window.addMortgageComponent = addMortgageComponent;
 window.calculate = calculate;
