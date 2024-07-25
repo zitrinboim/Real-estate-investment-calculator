@@ -130,13 +130,16 @@ function calculate() {
             <h2>תוצאות למכירה בשנה ${saleYear}:</h2>
             <p>סכום ששולם עד למכירה: ${formatNumber(totalPaidUntilSale.toFixed(2))} ₪</p>
             <p>יתרת חוב במשכנתא: ${formatNumber(remainingDebt.toFixed(2))} ₪</p>
+            <p>תשלום חודשי: ${formatNumber(totalMonthlyPayment.toFixed(2))} ₪</p>
             <p>סך הריבית ששולמה: ${formatNumber(totalInterestPaid.toFixed(2))} ₪</p>
             <p>ערך הדירה בזמן המכירה: ${formatNumber(propertyValueAtSale.toFixed(2))} ₪</p>
             <p>ערך ריאלי של הדירה בזמן המכירה: ${formatNumber(realPropertyValueAtSale.toFixed(2))} ₪</p>
             <p>סך תשלומים ריאליים עד למכירה: ${formatNumber(realTotalPaidUntilSale.toFixed(2))} ₪</p>
+            <p>עלייה בעלות הבנייה: ${formatNumber(constructionCostIncrease.toFixed(2))} ₪</p>
+            <p>מס רכישה: ${formatNumber(purchaseTaxAmount.toFixed(2))} ₪</p>
             <p>רווח גולמי: ${formatNumber(grossProfit.toFixed(2))} ₪</p>
             <p>מס שבח: ${formatNumber(capitalGainsTaxAmount.toFixed(2))} ₪</p>
-            <p>רווח נטו אחרי מכירה: ${formatNumber(netProfit.toFixed(2))} ₪</p>
+            <p>רווח נטו משוער (אחרי מס שבח): ${formatNumber(netProfit.toFixed(2))} ₪</p>
         `;
     } else {
         // Full term scenario
