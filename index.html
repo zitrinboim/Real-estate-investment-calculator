@@ -2,16 +2,20 @@
 <html lang="he" dir="rtl">
 
 <head>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script> -->
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>מחשבון משכנתא מתקדם</title>
+    <title>מחשבון השקעות נדל"ן</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
     <div class="container">
-        <h1>מחשבון משכנתא מתקדם</h1>
+        <h1>מחשבון השקעות נדל"ן</h1>
         <div class="form-group">
             <label for="propertyPrice">מחיר הנכס:</label>
             <input type="text" id="propertyPrice" required>
@@ -81,9 +85,14 @@
             <label for="capitalGainsTax">מס שבח (%):</label>
             <input type="text" id="capitalGainsTax" value="0">
         </div>
+        <!-- <button onclick="calculate()">חשב</button> -->
+        <!-- <button onclick="calculate().then(() => document.getElementById('downloadPDF').disabled = false)">חשב</button> -->
         <button onclick="calculate()">חשב</button>
         <div id="results"></div>
-        <button onclick="downloadPDF()">הורד PDF</button>
+        <!-- <button onclick="downloadPDF()">הורד PDF</button> -->
+        <!-- <button id="downloadPDF" onclick="downloadPDF()" disabled>הורד PDF</button> -->
+        <!-- <button onclick="generatePDF()">הורד PDF</button> -->
+        <button onclick="captureAndDownload()">הורד תוצאות</button>
         
     </div>
 
