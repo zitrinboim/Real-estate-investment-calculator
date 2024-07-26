@@ -1,5 +1,5 @@
 // יש לוודא שהקובץ הזה נטען אחרי שה-DOM נטען במלואו
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     setupFormattedInputs();
 });
 
@@ -123,7 +123,7 @@ function calculate() {
         const realPropertyValueAtSale = propertyValueAtSale / Math.pow(1 + inflation, saleYear);
         const realTotalPaidUntilSale = totalPaidUntilSale / Math.pow(1 + inflation, saleYear);
 
-        const grossProfit = propertyValueAtSale - propertyPrice  - purchaseTaxAmount - totalInterestPaid + constructionCostIncrease;
+        const grossProfit = propertyValueAtSale - propertyPrice - purchaseTaxAmount - totalInterestPaid + constructionCostIncrease;
         const capitalGainsTaxAmount = Math.max(0, grossProfit * capitalGainsTax);
         const netProfit = grossProfit - capitalGainsTaxAmount;
         results = `
@@ -150,7 +150,7 @@ function calculate() {
         const realFutureValue = futureValue / Math.pow(1 + inflation, maxPeriod);
         const realTotalPayments = totalPayments / Math.pow(1 + inflation, maxPeriod);
 
-        const grossProfit = propertyValueAtSale - propertyPrice  - purchaseTaxAmount - totalInterestPaid + constructionCostIncrease;
+        const grossProfit = propertyValueAtSale - propertyPrice - purchaseTaxAmount - totalInterestPaid + constructionCostIncrease;
         const capitalGainsTaxAmount = Math.max(0, grossProfit * capitalGainsTax);
         const netProfit = grossProfit - capitalGainsTaxAmount - purchaseTaxAmount;
 
@@ -168,32 +168,50 @@ function calculate() {
             <p>רווח גולמי משוער: ${formatNumber(grossProfit.toFixed(2))} ₪</p>
             <p>מס שבח: ${formatNumber(capitalGainsTaxAmount.toFixed(2))} ₪</p>
             <p>רווח נטו משוער (אחרי מס שבח): ${formatNumber(netProfit.toFixed(2))} ₪</p>
-        `;
+            `;
     }
-
     const resultsElement = document.getElementById('results');
     resultsElement.innerHTML = results;
     resultsElement.classList.add('show');
+    document.getElementById('downloadPDF').disabled = false;
 }
-
-function downloadPDF() {
-    const resultsElement = document.getElementById('results');
-    if (!resultsElement.innerHTML.trim()) {
-        alert('אנא בצע חישוב לפני הורדת ה-PDF');
-        return;
-    }
-
-    const element = document.createElement('div');
-    element.innerHTML = `
-        <h1>תוצאות חישוב המשכנתא</h1>
-        ${resultsElement.innerHTML}
-    `;
-
-    html2pdf().from(element).save('תוצאות_חישוב_משכנתא.pdf');
-}
-
-window.downloadPDF = downloadPDF;
 
 // חשוב לייצא את הפונקציות שנקראות מה-HTML
 window.addMortgageComponent = addMortgageComponent;
 window.calculate = calculate;
+
+function prepareResults(results) {
+    // המרת התוצאות לטבלה עם סגנון פשוט
+    const rows = results.split('\n').map(row => {
+        const [key, value] = row.split(':').map(item => item.trim());
+        return `<tr><td style="padding: 5px; border: 1px solid #ddd;">${key}</td><td style="padding: 5px; border: 1px solid #ddd;">${value || ''}</td></tr>`;
+    }).join('');
+
+    return `<table style="width: 100%; border-collapse: collapse;">${rows}</table>`;
+}
+
+function captureAndDownload() {
+    // ביטול אנימציות
+    document.body.classList.add('no-animations');
+
+    setTimeout(() => {
+        const element = document.querySelector('.container');
+        
+        html2canvas(element, {
+            scale: 2,
+            useCORS: true,
+            logging: false,
+            backgroundColor: '#ffffff'
+        }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = 'mortgage_calculation_results.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+
+            // החזרת אנימציות
+            document.body.classList.remove('no-animations');
+        });
+    }, 500);
+}
+
+window.captureAndDownload = captureAndDownload;
