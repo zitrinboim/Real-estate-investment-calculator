@@ -85,6 +85,12 @@ button#downloadPDF:hover {
     background-color: #2980b9;
     box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
 }
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.no-animations * { transition: none !important; animation: none !important; }
 
 #results {
     margin-top: 30px;
