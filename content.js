@@ -150,7 +150,7 @@ function calculate() {
         const realFutureValue = futureValue / Math.pow(1 + inflation, maxPeriod);
         const realTotalPayments = totalPayments / Math.pow(1 + inflation, maxPeriod);
 
-        const grossProfit = propertyValueAtSale - propertyPrice - purchaseTaxAmount - totalInterestPaid + constructionCostIncrease;
+        const grossProfit = futureValue - propertyPrice - purchaseTaxAmount - totalInterest + constructionCostIncrease;
         const capitalGainsTaxAmount = Math.max(0, grossProfit * capitalGainsTax);
         const netProfit = grossProfit - capitalGainsTaxAmount - purchaseTaxAmount;
 
